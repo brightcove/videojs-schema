@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-schema Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  
+</head>
+<body>
+  <video id="videojs-schema-player" class="video-js vjs-default-skin" controls>
+    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
+  </video>
+  <ul>
+    <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
+    <li><a href="docs/api/">Read generated docs.</a></li>
+  </ul>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="dist/videojs-schema.js"></script>
+  <script>
+    (function(window, videojs) {
+      var examplePlayer = window.examplePlayer = videojs('videojs-schema-player');
+      
+      examplePlayer.bcinfo = {
+        accountId: 5678,
+        playerId: 'abcd',
+        embedId: 'default'
+      };
+      examplePlayer.mediainfo = {
+        id: 1234,
+        name: 'NAME',
+        description: 'DESCRIPTION',
+        duration: 150,
+        publishedAt: '2019-02-12T09:07:44',
+        poster: 'https://loremflickr.com/1280/720'
+      };
+
+
+      var schema = window.schema = examplePlayer.schema();
+    }(window, window.videojs));
+  </script>
+</body>
+</html>
