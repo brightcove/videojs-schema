@@ -1,3 +1,6 @@
+<a name="0.3.0"></a>
+# 0.3.0 (2019-02-27)
+
 <a name="0.2.2"></a>
 ## [0.2.2](https://bithub.brightcove.com/bclifford/videojs-jsonld/compare/v0.2.1...v0.2.2) (2019-02-13)
 

@@ -4,6 +4,7 @@
 
 - [videojs-schema](#videojs-schema)
   - [Options](#options)
+  - [Install](#install)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -38,3 +39,23 @@ The embedUrl is only included if the social plugin is present and its `removeEmb
 Accepts `{id}`, `{referenceId}`, `{playerId}`,  `{embedId}` and `{accountId}` as macros.
 
 Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}`
+
+## Install
+
+Add [as a plugin to a player in Video Cloud Studio][plugins]:
+
+- Under "plugins" click "add a plugin", 'custom plugin"
+- Plugin name is `schema`
+- Javascript URL is `https://cdn.jsdelivr.net/npm/videojs-schema/dist/videojs-schema.min.js`
+- No CSS
+- Leave blank unless using options above, in which case
+
+```json
+{
+  "schemaId": "https://example.com/my/url/{id}"
+}
+```
+
+- Save, then publish
+
+[plugins]: [https://support.brightcove.com/configuring-player-plugins]
