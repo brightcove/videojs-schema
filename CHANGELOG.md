@@ -1,3 +1,10 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/brightcove/videojs-schema/compare/v0.3.1...v0.3.2) (2019-03-12)
+
+### Features
+
+* allow static values to be set on object ([#3](https://github.com/brightcove/videojs-schema/issues/3)) ([de7b15b](https://github.com/brightcove/videojs-schema/commit/de7b15b))
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/brightcove/videojs-schema/compare/v0.3.0...v0.3.1) (2019-03-12)
 
