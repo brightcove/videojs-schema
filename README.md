@@ -44,6 +44,23 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 
 `excludeTags` - array of tags to not include as keywords, e.g. `["youtubesync"]`
 
+`baseObject` - an option object of properties onto which to build the video specific metadata. For example this could be used to include a publisher object:
+
+```json
+"baseObject": {
+  "publisher": {
+    "@type": "Organization",
+    "name": "Publisher name",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://example.com/logo.jpg",
+      "width": 600,
+      "height": 60
+    }
+  }
+}
+```
+
 ## Install
 
 Add [as a plugin to a player in Video Cloud Studio][plugins]:

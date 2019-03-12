@@ -7,7 +7,8 @@ import duration8601 from './duration';
 const defaults = {
   schemaId: 'https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}',
   keywords: false,
-  excludeTags: []
+  excludeTags: [],
+  baseObject: {}
 };
 
 /**
@@ -37,7 +38,7 @@ const schema = function(options) {
       return;
     }
 
-    const ld = {
+    const ld = videojs.mergeOptions(options.baseObject, {
       '@context': 'http://schema.org/',
       '@type': 'VideoObject',
       'name': this.mediainfo.name,
@@ -51,7 +52,7 @@ const schema = function(options) {
         .replace('{playerId}', this.bcinfo.playerId)
         .replace('{embedId}', this.bcinfo.embedId)
         .replace('{accountId}', this.bcinfo.accountId)
-    };
+    });
 
     const formattedDuration = duration8601(this.mediainfo.duration);
 

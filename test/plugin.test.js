@@ -190,3 +190,20 @@ QUnit.test('includes tags if requested', function(assert) {
 
   assert.strictEqual(generatedSchema.keywords, 'one,three', 'add tags except exclusions');
 });
+
+QUnit.test('merges onto base options', function(assert) {
+
+  this.player.schema({
+    baseObject: {
+      param1: 'abc'
+    }
+  });
+  this.player.trigger('error');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.param1, 'abc', 'merged onto base options');
+});
