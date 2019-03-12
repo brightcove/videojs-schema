@@ -5,7 +5,9 @@ import duration8601 from './duration';
 
 // Default options for the plugin.
 const defaults = {
-  schemaId: 'https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}'
+  schemaId: 'https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}',
+  keywords: false,
+  excludeTags: []
 };
 
 /**
@@ -62,6 +64,20 @@ const schema = function(options) {
 
       parser.innerHTML = this.socialOverlay.getEmbedCode();
       ld.embedUrl = parser.querySelector('iframe').src;
+    }
+
+    if (options.keywords) {
+      const keywords = [];
+
+      this.mediainfo.tags.forEach(tag => {
+        if (options.excludeTags.indexOf(tag) === -1) {
+          keywords.push(tag);
+        }
+      });
+
+      if (keywords.length > 0) {
+        ld.keywords = keywords.join(',');
+      }
     }
 
     this.schemaEl_.textContent = JSON.stringify(ld);
