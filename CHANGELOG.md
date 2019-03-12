@@ -1,3 +1,10 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/brightcove/videojs-schema/compare/v0.3.0...v0.3.1) (2019-03-12)
+
+### Features
+
+* Option to add tags as keywords ([#2](https://github.com/brightcove/videojs-schema/issues/2)) ([36ecb36](https://github.com/brightcove/videojs-schema/commit/36ecb36))
+
 <a name="0.3.0"></a>
 # 0.3.0 (2019-02-27)
 
