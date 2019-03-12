@@ -41,7 +41,8 @@ QUnit.module('videojs-schema', {
       description: 'DESCRIPTION',
       duration: 3661,
       publishedAt: '2019-02-12T09:07:44',
-      poster: 'https://loremflickr.com/1280/720'
+      poster: 'https://loremflickr.com/1280/720',
+      tags: ['one', 'two', 'three']
     };
   },
 
@@ -172,4 +173,20 @@ QUnit.test('does not add embed if disabled in social', function(assert) {
     generatedSchema.embedUrl, undefined,
     'embed url not added'
   );
+});
+
+QUnit.test('includes tags if requested', function(assert) {
+
+  this.player.schema({
+    keywords: true,
+    excludeTags: ['two']
+  });
+  this.player.trigger('error');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.keywords, 'one,three', 'add tags except exclusions');
 });

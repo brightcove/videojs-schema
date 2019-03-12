@@ -40,6 +40,10 @@ Accepts `{id}`, `{referenceId}`, `{playerId}`,  `{embedId}` and `{accountId}` as
 
 Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}`
 
+`keywords` - if `true`, include tags as keywords. Default is `false`.
+
+`excludeTags` - array of tags to not include as keywords, e.g. `["youtubesync"]`
+
 ## Install
 
 Add [as a plugin to a player in Video Cloud Studio][plugins]:
