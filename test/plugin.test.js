@@ -188,8 +188,5 @@ QUnit.test('includes tags if requested', function(assert) {
 
   const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
 
-  assert.strictEqual(
-    generatedSchema.keywords, 'one,three',
-    'embed url from social overlay'
-  );
+  assert.strictEqual(generatedSchema.keywords, 'one,three', 'add tags except exclusions');
 });
