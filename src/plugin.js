@@ -9,7 +9,8 @@ const defaults = {
   keywords: false,
   excludeTags: [],
   baseObject: {},
-  includeEmbedUrl: true
+  includeEmbedUrl: true,
+  preferLongDescription: false
 };
 
 /**
@@ -25,11 +26,13 @@ const defaults = {
  * @param    {boolean} [options.keywords]
  *           Whether to include tags as keywords
  * @param    {Array} [options.excludeTags]
- *           If including tags, an array of tags to omit
+ *           If including tags, an array of tags to exclude
  * @param    {Object} [options.baseObject]
- *           An object to merge the generated schema onto
+ *           A template object to build the schema onto
  * @param    {boolean} [options.includeEmbedUrl]
  *           Whether to include the embed url
+ * @param    {boolean} [options.preferLongDescription]
+ *           Whether to prefer the long description
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -51,7 +54,6 @@ const schema = function(options) {
       '@context': 'http://schema.org/',
       '@type': 'VideoObject',
       'name': this.mediainfo.name,
-      'description': this.mediainfo.description,
       'thumbnailUrl': this.mediainfo.poster,
       'uploadDate': this.mediainfo.publishedAt.split('T')[0],
       // Poor man's ad macros
@@ -62,6 +64,12 @@ const schema = function(options) {
         .replace('{embedId}', this.bcinfo.embedId)
         .replace('{accountId}', this.bcinfo.accountId)
     });
+
+    if (options.preferLongDescription) {
+      ld.description = this.mediainfo.longDescription || this.mediainfo.description;
+    } else {
+      ld.description = this.mediainfo.description;
+    }
 
     const formattedDuration = duration8601(this.mediainfo.duration);
 

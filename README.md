@@ -63,6 +63,8 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 }
 ```
 
+`preferLongDescription` - if `true`, use the long description if available. If `false`, or `true` and long description is not set then the (short) description field will be used. Default is `false`.
+
 ## Install
 
 Add [as a plugin to a player in Video Cloud Studio][plugins]:
