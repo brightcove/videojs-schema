@@ -8,7 +8,8 @@ const defaults = {
   schemaId: 'https://players.brightcove.net/{accountId}/{playerId}_{embedId}/index.html?videoId={id}',
   keywords: false,
   excludeTags: [],
-  baseObject: {}
+  baseObject: {},
+  includeEmbedUrl: true
 };
 
 /**
@@ -21,6 +22,14 @@ const defaults = {
  *           An object of options
  * @param    {string} [options.schemaId]
  *           A URI to use as the id in the schema
+ * @param    {boolean} [options.keywords]
+ *           Whether to include tags as keywords
+ * @param    {Array} [options.excludeTags]
+ *           If including tags, an array of tags to omit
+ * @param    {Object} [options.baseObject]
+ *           An object to merge the generated schema onto
+ * @param    {boolean} [options.includeEmbedUrl]
+ *           Whether to include the embed url
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -60,11 +69,17 @@ const schema = function(options) {
       ld.duration = formattedDuration;
     }
 
-    if (this.socialSettings && !this.socialSettings.removeEmbed) {
-      const parser = document.createElement('div');
+    if (options.includeEmbedUrl) {
+      if (this.socialSettings) {
+        const parser = document.createElement('div');
 
-      parser.innerHTML = this.socialOverlay.getEmbedCode();
-      ld.embedUrl = parser.querySelector('iframe').src;
+        parser.innerHTML = this.socialOverlay.getEmbedCode();
+        ld.embedUrl = parser.querySelector('iframe').src;
+      } else {
+        ld.embedUrl = 'https://players.brightcove.net/' + this.bcinfo.accountId +
+            '/' + this.bcinfo.playerId + '_' + this.bcinfo.embedId +
+            '/index.html?videoId=' + this.mediainfo.id;
+      }
     }
 
     if (options.keywords) {

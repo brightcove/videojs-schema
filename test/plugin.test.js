@@ -150,7 +150,7 @@ QUnit.test('adds embed url if social plugin present', function(assert) {
   );
 });
 
-QUnit.test('does not add embed if disabled in social', function(assert) {
+QUnit.test('does not add embed if disabled', function(assert) {
 
   this.player.socialSettings = {
     removeEmbed: true
@@ -161,7 +161,7 @@ QUnit.test('does not add embed if disabled in social', function(assert) {
     }
   };
 
-  this.player.schema();
+  this.player.schema({includeEmbedUrl: false});
   this.player.trigger('error');
 
   // Tick the clock forward enough to trigger the player to be "ready".
