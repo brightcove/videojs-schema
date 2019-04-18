@@ -46,6 +46,8 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 
 `baseObject` - an option object of properties onto which to build the video specific metadata. For example this could be used to include a publisher object:
 
+`includeEmbedUrl` - if `false`, no embed url is included. Inlcuding thisURL may be expected by search engines. Default is `true`.
+
 ```json
 "baseObject": {
   "publisher": {
