@@ -2,6 +2,7 @@ import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 import document from 'global/document';
 import duration8601 from './duration';
+import bestTrack from './track';
 
 // Default options for the plugin.
 const defaults = {
@@ -101,6 +102,39 @@ const schema = function(options) {
 
       if (keywords.length > 0) {
         ld.keywords = keywords.join(',');
+      }
+    }
+
+    if (options.transcript || options.caption) {
+      const track = bestTrack.call(this, this.mediainfo.textTracks);
+
+      if (track) {
+        const source = track.sources.find((s) => {
+          return s.src.startsWith('https://');
+        });
+
+        if (options.caption) {
+          ld.caption = {
+            encodingType: 'text/vtt',
+            contentUrl: source.src
+          };
+        }
+
+        if (options.transcript) {
+          videojs.xhr(source.src, (err, o, b) => {
+            if (!err && b) {
+              let transcriptText = '';
+              const matches = b.match(/^(\d{2}:)?\d{2}:\d{2}\.\d+ +--> +(\d{2}:)?\d{2}:\d{2}\.\d+.*\n(.*(?:\r?\n(?!\r?\n).*)*)/gm);
+
+              matches.forEach(m => {
+                transcriptText += m.replace(/^(\d{2}:)?\d{2}:\d{2}\.\d+ +--> +(\d{2}:)?\d{2}:\d{2}\.\d+.*\n/, '') + '\n';
+              });
+
+              ld.transcript = transcriptText;
+              this.schemaEl_.textContent = JSON.stringify(ld);
+            }
+          });
+        }
       }
     }
 

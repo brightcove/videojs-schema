@@ -65,6 +65,10 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 
 `preferLongDescription` - if `true`, use the long description if available. If `false`, or `true` and long description is not set then the (short) description field will be used. Default is `false`.
 
+`captions` - if `true`, will add the URL to the captions text track if available as a captions mediaObject. The first captions or subtitles track matching the player language will be selected.
+
+`transcript` - if `true`, will select the text track as for `captions` and set the contents of the track as the transcript property (text only without time codes).
+
 ## Install
 
 Add [as a plugin to a player in Video Cloud Studio][plugins]:

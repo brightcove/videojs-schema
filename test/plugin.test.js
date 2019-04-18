@@ -236,3 +236,39 @@ QUnit.test('long description can be used', function(assert) {
 
   assert.strictEqual(generatedSchema.description, 'LONGDESCRIPTION', 'used long description');
 });
+
+QUnit.test('adds caption url', function(assert) {
+
+  this.player.mediainfo.textTracks = [
+    {
+      kind: 'subtitles',
+      srclang: 'en',
+      sources: [
+        {
+          src: 'https://english'
+        }
+      ]
+    },
+    {
+      kind: 'subtitles',
+      srclang: 'fr',
+      sources: [
+        {
+          src: 'https://french'
+        }
+      ]
+    }
+  ];
+  this.player.language('fr');
+  this.player.schema({
+    caption: true
+  });
+  this.player.trigger('error');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.caption.contentUrl, 'https://french', 'correct caption url added');
+});
