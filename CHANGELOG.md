@@ -1,3 +1,14 @@
+<a name="0.5.0"></a>
+# 0.5.0 (2021-05-24)
+
+### Features
+
+* add option to use long description ([#4](https://github.com/brightcove/videojs-schema/issues/4)) ([3be64c2](https://github.com/brightcove/videojs-schema/commit/3be64c2))
+* allow static values to be set on object ([#3](https://github.com/brightcove/videojs-schema/issues/3)) ([de7b15b](https://github.com/brightcove/videojs-schema/commit/de7b15b))
+* default to inlcude embedUrl ([#5](https://github.com/brightcove/videojs-schema/issues/5)) ([003339e](https://github.com/brightcove/videojs-schema/commit/003339e))
+* Option to add tags as keywords ([#2](https://github.com/brightcove/videojs-schema/issues/2)) ([36ecb36](https://github.com/brightcove/videojs-schema/commit/36ecb36))
+* Use video tile for description, if description is empty ([#24](https://github.com/brightcove/videojs-schema/issues/24)) ([869b6fb](https://github.com/brightcove/videojs-schema/commit/869b6fb))
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/brightcove/videojs-schema/compare/v0.3.2...v0.4.0) (2019-04-18)
 
