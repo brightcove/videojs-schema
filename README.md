@@ -4,6 +4,7 @@
 
 - [videojs-schema](#videojs-schema)
   - [Options](#options)
+  - [Description metadata](#description-metadata)
   - [Install](#install)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -64,6 +65,9 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 ```
 
 `preferLongDescription` - if `true`, use the long description if available. If `false`, or `true` and long description is not set then the (short) description field will be used. Default is `false`.
+
+## Description metadata
+By default, the short description field is used as the description text. If the `preferLongDescription` option is set, the long description will be used instead, falling back to short description if empty. If the short description (or both long and short descriptions with `preferLongDescription`) is empty, then the title is used since no description is considered invlaid schema.
 
 ## Install
 
