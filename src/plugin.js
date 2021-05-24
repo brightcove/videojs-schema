@@ -68,7 +68,7 @@ const schema = function(options) {
     if (options.preferLongDescription) {
       ld.description = this.mediainfo.longDescription || this.mediainfo.description;
     } else {
-      ld.description = this.mediainfo.description;
+      ld.description = this.mediainfo.description || this.mediainfo.name;
     }
 
     const formattedDuration = duration8601(this.mediainfo.duration);
