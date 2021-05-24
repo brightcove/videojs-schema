@@ -66,7 +66,7 @@ const schema = function(options) {
     });
 
     if (options.preferLongDescription) {
-      ld.description = this.mediainfo.longDescription || this.mediainfo.description;
+      ld.description = this.mediainfo.longDescription || this.mediainfo.description || this.mediainfo.name;
     } else {
       ld.description = this.mediainfo.description || this.mediainfo.name;
     }
