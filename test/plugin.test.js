@@ -209,6 +209,30 @@ QUnit.test('merges onto base options', function(assert) {
   assert.strictEqual(generatedSchema.param1, 'abc', 'merged onto base options');
 });
 
+QUnit.test('defaults to video title when prefer long description but both short description and long description are empty', function(assert) {
+  this.player.mediainfo = {
+    id: 1234,
+    referenceId: 'xyz',
+    name: 'NAME',
+    description: '',
+    duration: 3661,
+    publishedAt: '2019-02-12T09:07:44',
+    poster: 'https://loremflickr.com/1280/720',
+    tags: ['one', 'two', 'three'],
+    longDescription: ''
+  };
+  this.player.schema({
+    preferLongDescription: true
+  });
+  this.player.trigger('error');
+
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.description, 'NAME', 'used video title');
+});
+
 QUnit.test('defaults to short description', function(assert) {
 
   this.player.schema();
@@ -220,6 +244,28 @@ QUnit.test('defaults to short description', function(assert) {
   const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
 
   assert.strictEqual(generatedSchema.description, 'DESCRIPTION', 'used short description');
+});
+
+QUnit.test('defaults to video title if short description is empty', function(assert) {
+  this.player.mediainfo = {
+    id: 1234,
+    referenceId: 'xyz',
+    name: 'NAME',
+    description: '',
+    duration: 3661,
+    publishedAt: '2019-02-12T09:07:44',
+    poster: 'https://loremflickr.com/1280/720',
+    tags: ['one', 'two', 'three']
+  };
+  this.player.schema();
+  this.player.trigger('error');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.description, 'NAME', 'used video title');
 });
 
 QUnit.test('long description can be used', function(assert) {
