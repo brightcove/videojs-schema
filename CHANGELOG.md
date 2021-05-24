@@ -1,3 +1,10 @@
+<a name="0.5.0"></a>
+# 0.5.0 (2021-05-24)
+
+### Features
+
+* Use video tile for description, if description is empty ([#24](https://github.com/brightcove/videojs-schema/issues/24)) ([869b6fb](https://github.com/brightcove/videojs-schema/commit/869b6fb))
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/brightcove/videojs-schema/compare/v0.3.2...v0.4.0) (2019-04-18)
 

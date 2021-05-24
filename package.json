@@ -1,6 +1,6 @@
 {
   "name": "videojs-schema",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Injects JSON-LD metadata into the DOM for SEO",
   "main": "dist/videojs-schema.cjs.js",
   "module": "dist/videojs-schema.es.js",
