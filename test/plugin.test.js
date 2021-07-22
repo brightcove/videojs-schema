@@ -45,6 +45,7 @@ QUnit.module('videojs-schema', {
       tags: ['one', 'two', 'three'],
       longDescription: 'LONGDESCRIPTION'
     };
+    this.player.catalog = {};
   },
 
   afterEach() {
@@ -281,4 +282,24 @@ QUnit.test('long description can be used', function(assert) {
   const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
 
   assert.strictEqual(generatedSchema.description, 'LONGDESCRIPTION', 'used long description');
+});
+
+QUnit.test('supports multilingual metadata', function(assert) {
+
+  this.player.catalog.getMetadata = opts => {
+    if (opts.lang === 'fr') {
+      return videojs.mergeOptions(this.player.mediainfo, {name: 'NOM'});
+    }
+    return this.player.mediainfo;
+  };
+  this.player.language('fr');
+  this.player.schema();
+  this.player.trigger('error');
+
+  // Tick the clock forward enough to trigger the player to be "ready".
+  this.clock.tick(1);
+
+  const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+  assert.strictEqual(generatedSchema.name, 'NOM', 'used localised name');
 });
