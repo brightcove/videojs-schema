@@ -73,33 +73,35 @@ const schema = function(options) {
   // This listens to error because Googlebot cannot play video
   this.on(['loadstart', 'error'], e => {
 
-    if (!this.bcinfo || !this.mediainfo || !this.mediainfo.id) {
+    if (!this.bcinfo || !this.catalog || !this.mediainfo || !this.mediainfo.id) {
       videojs.log.warn('Unable to add schema without catalog info.');
       return;
     }
 
+    const mediainfo = this.catalog.getMetadata ? this.catalog.getMetadata({lang: this.language()}) : this.mediainfo;
+
     const ld = videojs.mergeOptions(options.baseObject, {
       '@context': 'http://schema.org/',
       '@type': 'VideoObject',
-      'name': this.mediainfo.name,
-      'thumbnailUrl': this.mediainfo.poster,
-      'uploadDate': this.mediainfo.publishedAt.split('T')[0],
+      'name': mediainfo.name,
+      'thumbnailUrl': mediainfo.poster,
+      'uploadDate': mediainfo.publishedAt.split('T')[0],
       // Poor man's ad macros
       '@id': options.schemaId
-        .replace('{id}', this.mediainfo.id)
-        .replace('{referenceId}', this.mediainfo.referenceId)
+        .replace('{id}', mediainfo.id)
+        .replace('{referenceId}', mediainfo.referenceId)
         .replace('{playerId}', this.bcinfo.playerId)
         .replace('{embedId}', this.bcinfo.embedId)
         .replace('{accountId}', this.bcinfo.accountId)
     });
 
     if (options.preferLongDescription) {
-      ld.description = this.mediainfo.longDescription || this.mediainfo.description || this.mediainfo.name;
+      ld.description = mediainfo.longDescription || mediainfo.description || mediainfo.name;
     } else {
-      ld.description = this.mediainfo.description || this.mediainfo.name;
+      ld.description = mediainfo.description || mediainfo.name;
     }
 
-    const formattedDuration = duration8601(this.mediainfo.duration);
+    const formattedDuration = duration8601(mediainfo.duration);
 
     if (formattedDuration) {
       ld.duration = formattedDuration;
@@ -114,14 +116,14 @@ const schema = function(options) {
       } else {
         ld.embedUrl = 'https://players.brightcove.net/' + this.bcinfo.accountId +
             '/' + this.bcinfo.playerId + '_' + this.bcinfo.embedId +
-            '/index.html?videoId=' + this.mediainfo.id;
+            '/index.html?videoId=' + mediainfo.id;
       }
     }
 
     if (options.keywords) {
       const keywords = [];
 
-      this.mediainfo.tags.forEach(tag => {
+      mediainfo.tags.forEach(tag => {
         if (options.excludeTags.indexOf(tag) === -1) {
           keywords.push(tag);
         }
