@@ -1,11 +1,13 @@
 <!doctype html>
-<html>
+<html lang="fr">
+
 <head>
   <meta charset="utf-8">
   <title>videojs-schema Demo</title>
   <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
-  
+
 </head>
+
 <body>
   <video id="videojs-schema-player" class="video-js vjs-default-skin" controls>
     <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
@@ -18,9 +20,9 @@
   <script src="node_modules/video.js/dist/video.js"></script>
   <script src="dist/videojs-schema.js"></script>
   <script>
-    (function(window, videojs) {
+    (function (window, videojs) {
       var examplePlayer = window.examplePlayer = videojs('videojs-schema-player');
-      
+
       examplePlayer.bcinfo = {
         accountId: 5678,
         playerId: 'abcd',
@@ -32,12 +34,38 @@
         description: 'DESCRIPTION',
         duration: 150,
         publishedAt: '2019-02-12T09:07:44',
-        poster: 'https://loremflickr.com/1280/720'
+        poster: 'https://loremflickr.com/1280/720',
+        textTracks: [{
+          "id": "4e0894cc-42e4-41c4-bccf-91ea63e4fc9c",
+          "account_id": "906043040001",
+          "src": "http://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72",
+          "srclang": "de",
+          "label": "Blick",
+          "kind": "subtitles",
+          "mime_type": "text/webvtt",
+          "asset_id": null,
+          "sources": [{
+            "src": "http://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72"
+          }, {
+            "src": "https://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72"
+          }],
+          "in_band_metadata_track_dispatch_type": "",
+          "default": false
+        }]
       };
+      examplePlayer.catalog = {
+        getMetadata: opts => {
+          if (opts.lang === 'fr') {
+            return videojs.mergeOptions(examplePlayer.mediainfo, {name: 'NOM'});
+          }
+          return examplePlayer.mediainfo;
+        }
+      }
 
-
-      var schema = window.schema = examplePlayer.schema();
+      var schema = window.schema = examplePlayer.schema({transcript: true});
     }(window, window.videojs));
+
   </script>
 </body>
+
 </html>
