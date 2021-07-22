@@ -14,6 +14,29 @@ const defaults = {
 };
 
 /**
+ * Finds an http source for a track
+ * 
+ * @param {Object} track
+ *        Text track object 
+ * @returns {string|null}
+ *          HTTPS source URl
+ */
+const getHttpsSource = (track) => {
+  if (track.src && track.src.startsWith('https:')) {
+    return track.src;
+  }
+  if (track.sources) {
+    const httpsSrc = track.sources.find(t => {
+      return t.src.startsWith('https:');
+    });
+    if (httpsSrc) {
+      return httpsSrc.src;
+    }
+  }
+  return null;
+};
+
+/**
  * Schema plugin. Adds schema.org metadata in json+ld format
  * to the DOM for Google and other search engines which will
  * read data inserted by javascript.
@@ -33,6 +56,10 @@ const defaults = {
  *           Whether to include the embed url
  * @param    {boolean} [options.preferLongDescription]
  *           Whether to prefer the long description
+ * @param    {boolean} [options.transcript]
+ *           Whether to include a transcript from a subtitles or captions track
+ * @param    {boolean} [options.transcriptMatchLanguage]
+ *           Whether to only return a transcript that matches the player language
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -102,6 +129,50 @@ const schema = function(options) {
       if (keywords.length > 0) {
         ld.keywords = keywords.join(',');
       }
+    }
+
+    if (options.transcript) {
+      let track = this.mediainfo.textTracks.find(t => {
+        return (
+          (t.kind === 'captions' || t.kind === 'subtitles') &&
+          getHttpsSource(track) &&
+          t.srclang.split('-')[0] === this.language().split('-')[0]
+        );
+      });
+
+      if (!track && !options.transcriptMatchLanguage) {
+        track = this.mediainfo.textTracks.find(t => {
+          return (
+            (t.kind === 'captions' || t.kind === 'subtitles') &&
+            getHttpsSource(t)
+          );
+        });
+      }
+
+      if (!track) {
+        videojs.log.debug('No matching track');
+        return;
+      }
+
+      videojs.xhr(getHttpsSource(track), (err, resp) => {
+        if (err || resp.statusCode >= 400) {
+          videojs.log.debug(err, resp.statusCode);
+          return;
+        }
+
+        const cueRegex = /\d\d:\d\d\.\d\d\d --> \d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
+        let match;
+        let transcript = [];
+
+        while ((match = cueRegex.exec(resp.body)) !== null) {
+          transcript.push(match[1])
+        }
+
+        ld.transcript = transcript.join('');
+
+        this.schemaEl_.textContent = JSON.stringify(ld);
+      });
+
     }
 
     this.schemaEl_.textContent = JSON.stringify(ld);
