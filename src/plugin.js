@@ -15,10 +15,10 @@ const defaults = {
 
 /**
  * Finds an http source for a track
- * 
+ *
  * @param {Object} track
- *        Text track object 
- * @returns {string|null}
+ *        Text track object
+ * @return {string|null}
  *          HTTPS source URl
  */
 const getHttpsSource = (track) => {
@@ -29,6 +29,7 @@ const getHttpsSource = (track) => {
     const httpsSrc = track.sources.find(t => {
       return t.src.startsWith('https:');
     });
+
     if (httpsSrc) {
       return httpsSrc.src;
     }
@@ -162,10 +163,10 @@ const schema = function(options) {
 
         const cueRegex = /\d\d:\d\d\.\d\d\d --> \d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
         let match;
-        let transcript = [];
+        const transcript = [];
 
         while ((match = cueRegex.exec(resp.body)) !== null) {
-          transcript.push(match[1])
+          transcript.push(match[1]);
         }
 
         ld.transcript = transcript.join('');
