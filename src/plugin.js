@@ -135,7 +135,7 @@ const schema = function(options) {
     }
 
     if (options.transcript) {
-      let track = this.mediainfo.textTracks.find(t => {
+      let track = mediainfo.textTracks.find(t => {
         return (
           (t.kind === 'captions' || t.kind === 'subtitles') &&
           getHttpsSource(track) &&
@@ -144,7 +144,7 @@ const schema = function(options) {
       });
 
       if (!track && !options.transcriptMatchLanguage) {
-        track = this.mediainfo.textTracks.find(t => {
+        track = mediainfo.textTracks.find(t => {
           return (
             (t.kind === 'captions' || t.kind === 'subtitles') &&
             getHttpsSource(t)
