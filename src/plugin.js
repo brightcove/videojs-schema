@@ -1,7 +1,7 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 import document from 'global/document';
-import duration8601 from './duration';
+import {duration8601, getFetchableSource} from './utils';
 
 // Default options for the plugin.
 const defaults = {
@@ -10,31 +10,9 @@ const defaults = {
   excludeTags: [],
   baseObject: {},
   includeEmbedUrl: true,
-  preferLongDescription: false
-};
-
-/**
- * Finds an http source for a track
- *
- * @param {Object} track
- *        Text track object
- * @return {string|null}
- *          HTTPS source URl
- */
-const getHttpsSource = (track) => {
-  if (track.src && track.src.startsWith('https:')) {
-    return track.src;
-  }
-  if (track.sources) {
-    const httpsSrc = track.sources.find(t => {
-      return t.src.startsWith('https:');
-    });
-
-    if (httpsSrc) {
-      return httpsSrc.src;
-    }
-  }
-  return null;
+  preferLongDescription: false,
+  transcript: false,
+  transcriptMatchAny: false
 };
 
 /**
@@ -59,8 +37,8 @@ const getHttpsSource = (track) => {
  *           Whether to prefer the long description
  * @param    {boolean} [options.transcript]
  *           Whether to include a transcript from a subtitles or captions track
- * @param    {boolean} [options.transcriptMatchLanguage]
- *           Whether to only return a transcript that matches the player language
+ * @param    {boolean} [options.transcriptMatchAny]
+ *           Whether to return a transcript if there's a track but no language match
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -138,44 +116,42 @@ const schema = function(options) {
       let track = mediainfo.textTracks.find(t => {
         return (
           (t.kind === 'captions' || t.kind === 'subtitles') &&
-          getHttpsSource(track) &&
+          getFetchableSource(t) &&
           t.srclang.split('-')[0] === this.language().split('-')[0]
         );
       });
 
-      if (!track && !options.transcriptMatchLanguage) {
+      if (!track && !options.transcriptMatchAny) {
         track = mediainfo.textTracks.find(t => {
           return (
             (t.kind === 'captions' || t.kind === 'subtitles') &&
-            getHttpsSource(t)
+            getFetchableSource(t)
           );
         });
       }
 
       if (!track) {
         videojs.log.debug('No matching track');
-        return;
+      } else {
+        videojs.xhr(getFetchableSource(track), (err, resp) => {
+          if (err || resp.statusCode >= 400) {
+            videojs.log.debug(err, resp.statusCode);
+            return;
+          }
+
+          const cueRegex = /(\d\d:)?\d\d:\d\d\.\d\d\d[ \t]+-->[ \t]+(\d\d:)?\d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
+          let match;
+          const transcript = [];
+
+          while ((match = cueRegex.exec(resp.body)) !== null) {
+            transcript.push(match[3]);
+          }
+
+          ld.transcript = transcript.join('');
+
+          this.schemaEl_.textContent = JSON.stringify(ld);
+        });
       }
-
-      videojs.xhr(getHttpsSource(track), (err, resp) => {
-        if (err || resp.statusCode >= 400) {
-          videojs.log.debug(err, resp.statusCode);
-          return;
-        }
-
-        const cueRegex = /\d\d:\d\d\.\d\d\d --> \d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
-        let match;
-        const transcript = [];
-
-        while ((match = cueRegex.exec(resp.body)) !== null) {
-          transcript.push(match[1]);
-        }
-
-        ld.transcript = transcript.join('');
-
-        this.schemaEl_.textContent = JSON.stringify(ld);
-      });
-
     }
 
     this.schemaEl_.textContent = JSON.stringify(ld);

@@ -1,3 +1,5 @@
+import window from 'global/window';
+
 /**
  * Function to format seconds as duration
  *
@@ -32,4 +34,37 @@ const duration8601 = seconds => {
   return output;
 };
 
-export default duration8601;
+/**
+ * Finds a source matching the current protocol, https: or data:
+ *
+ * @param {Object} track
+ *        Text track object
+ * @return {string|null}
+ *          HTTPS source URl
+ */
+const getFetchableSource = (track) => {
+  if (track.src && (
+    track.src.startsWith(window.location.protocol) ||
+    track.src.startsWith('https:') ||
+    track.src.startsWith('data:')
+  )) {
+    return track.src;
+  }
+  if (track.sources) {
+    const usableSource = track.sources.find(t => {
+      return t.src.startsWith('https:') ||
+      t.src.startsWith('https:') ||
+      t.src.startsWith('data:');
+    });
+
+    if (usableSource) {
+      return usableSource.src;
+    }
+  }
+  return null;
+};
+
+export {
+  duration8601,
+  getFetchableSource
+};

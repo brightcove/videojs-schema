@@ -1,6 +1,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
 
 - [videojs-schema](#videojs-schema)
   - [Options](#options)
@@ -48,6 +48,10 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 `baseObject` - an option object of properties onto which to build the video specific metadata. For example this could be used to include a publisher object:
 
 `includeEmbedUrl` - if `false`, no embed url is included. Inlcuding thisURL may be expected by search engines. Default is `true`.
+
+`transcript` - if `true`, a captions or subtitles track with a matching language will be added as a transcript. Default is `false`.
+
+`transcriptMatchAny` - if `true` and `transcript` is also `true`, a transcript will be added from the first usable track, if there is no language match. Default is `false`.
 
 ```json
 "baseObject": {
