@@ -43,25 +43,21 @@ const duration8601 = seconds => {
  *          HTTPS source URl
  */
 const getFetchableSource = (track) => {
-  if (track.src && (
-    track.src.startsWith(window.location.protocol) ||
-    track.src.startsWith('https:') ||
-    track.src.startsWith('data:')
-  )) {
-    return track.src;
+  let sources = [];
+
+  if (track.src) {
+    sources.push(track.src);
   }
   if (track.sources) {
-    const usableSource = track.sources.find(t => {
-      return t.src.startsWith('https:') ||
-      t.src.startsWith('https:') ||
-      t.src.startsWith('data:');
-    });
-
-    if (usableSource) {
-      return usableSource.src;
-    }
+    sources = sources.concat(track.sources.map(s => s.src));
   }
-  return null;
+
+  return sources.find(t => {
+    return t.startsWith(window.location.protocol) ||
+      t.startsWith('https:') ||
+      t.startsWith('data:');
+  }) || null;
+
 };
 
 export {

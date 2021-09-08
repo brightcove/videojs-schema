@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -22,6 +22,7 @@
   <script>
     (function (window, videojs) {
       var examplePlayer = window.examplePlayer = videojs('videojs-schema-player');
+      var trackSrc = 'data:text/vtt;base64,V0VCVlRUCgoxCjAwOjAwOjAwLjAwMCAtLT4gMDA6MDA6MDIuMDAwCldlbGNvbWUKCjIKMDA6MDA6MDIuMjAwIC0tPiAwMDowMDowNC4wMDAKVGhpcyBpcyBhIHZpZGVvCgozCjAwOjAwOjA0LjEwMCAtLT4gMDA6MDA6MDcuMTE0ClRoZXNlIGFyZSB0aGUgc3VidGl0bGVzCgo0CjAwOjAwOjA3LjE4NiAtLT4gMDA6MDA6MDguOTU3ClRoZXkgd2lsbCBiZSBhZGRlZCB0byBhIHRyYW5zY3JpcHQK';
 
       examplePlayer.bcinfo = {
         accountId: 5678,
@@ -36,20 +37,11 @@
         publishedAt: '2019-02-12T09:07:44',
         poster: 'https://loremflickr.com/1280/720',
         textTracks: [{
-          "id": "4e0894cc-42e4-41c4-bccf-91ea63e4fc9c",
-          "account_id": "906043040001",
-          "src": "http://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72",
-          "srclang": "de",
-          "label": "Blick",
+          "src": trackSrc,
+          "srclang": "en",
+          "label": "English",
           "kind": "subtitles",
           "mime_type": "text/webvtt",
-          "asset_id": null,
-          "sources": [{
-            "src": "http://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72"
-          }, {
-            "src": "https://bcboltbde696aa-a.akamaihd.net/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt?akamai_token=exp=1629317880~acl=/media/v1/text/vtt/clear/906043040001/5323e9df-6a5d-4053-bef3-135f4f7bbcb1/4e0894cc-42e4-41c4-bccf-91ea63e4fc9c/text.vtt*~hmac=3c18d1cb0f848156694c774fabf8f0796fc1baa6d2410b0baaec05a5be828a72"
-          }],
-          "in_band_metadata_track_dispatch_type": "",
           "default": false
         }]
       };
