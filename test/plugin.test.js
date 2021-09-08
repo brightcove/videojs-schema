@@ -1,4 +1,5 @@
 import document from 'global/document';
+import window from 'global/window';
 
 import QUnit from 'qunit';
 import sinon from 'sinon';
@@ -7,6 +8,20 @@ import videojs from 'video.js';
 import plugin from '../src/plugin';
 
 const Player = videojs.getComponent('Player');
+
+const trackSource = cues => {
+  let text = 'WEBVTT\n\n';
+  let time = 0;
+
+  cues.forEach(cue => {
+    text += `00:${(time++).toString().padStart(2, '0')}:00.000 --> 00:${(time++).toString().padStart(2, '0')}:00.000\n`;
+    cue.forEach(line => {
+      text += line + '\n';
+    });
+    text += '\n';
+  });
+  return 'data:text/vtt;base64,' + window.btoa(text);
+};
 
 QUnit.test('the environment is sane', function(assert) {
   assert.strictEqual(typeof Array.isArray, 'function', 'es5 exists');
@@ -302,4 +317,35 @@ QUnit.test('supports multilingual metadata', function(assert) {
   const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
 
   assert.strictEqual(generatedSchema.name, 'NOM', 'used localised name');
+});
+
+QUnit.test('can add transcript', function(assert) {
+  const done = assert.async();
+
+  this.player.mediainfo.textTracks = [
+    {
+      src: trackSource([['One line'], ['Two', 'lines']]),
+      srclang: 'en',
+      kind: 'subtitles'
+    },
+    {
+      src: trackSource([['Eine Zeile'], ['Zwei', 'Zeilen']]),
+      srclang: 'de',
+      kind: 'subtitles'
+    }
+  ];
+  this.player.language('de-de');
+  this.player.schema({transcript: true});
+  this.player.trigger('error');
+
+  const mo = new window.MutationObserver(mutations => {
+    const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);
+
+    if (generatedSchema.transcript) {
+      assert.strictEqual(generatedSchema.transcript, 'Eine Zeile\nZwei\nZeilen\n', 'has transcript with matching language');
+      done();
+    }
+  });
+
+  mo.observe(this.player.schemaEl_, {childList: true});
 });

@@ -1,7 +1,7 @@
 import videojs from 'video.js';
 import {version as VERSION} from '../package.json';
 import document from 'global/document';
-import duration8601 from './duration';
+import {duration8601, getFetchableSource} from './utils';
 
 // Default options for the plugin.
 const defaults = {
@@ -10,7 +10,9 @@ const defaults = {
   excludeTags: [],
   baseObject: {},
   includeEmbedUrl: true,
-  preferLongDescription: false
+  preferLongDescription: false,
+  transcript: false,
+  transcriptMatchAny: false
 };
 
 /**
@@ -33,6 +35,10 @@ const defaults = {
  *           Whether to include the embed url
  * @param    {boolean} [options.preferLongDescription]
  *           Whether to prefer the long description
+ * @param    {boolean} [options.transcript]
+ *           Whether to include a transcript from a subtitles or captions track
+ * @param    {boolean} [options.transcriptMatchAny]
+ *           Whether to return a transcript if there's a track but no language match
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -103,6 +109,48 @@ const schema = function(options) {
 
       if (keywords.length > 0) {
         ld.keywords = keywords.join(',');
+      }
+    }
+
+    if (options.transcript) {
+      let track = mediainfo.textTracks.find(t => {
+        return (
+          (t.kind === 'captions' || t.kind === 'subtitles') &&
+          getFetchableSource(t) &&
+          t.srclang.split('-')[0] === this.language().split('-')[0]
+        );
+      });
+
+      if (!track && !options.transcriptMatchAny) {
+        track = mediainfo.textTracks.find(t => {
+          return (
+            (t.kind === 'captions' || t.kind === 'subtitles') &&
+            getFetchableSource(t)
+          );
+        });
+      }
+
+      if (!track) {
+        videojs.log.debug('No matching track');
+      } else {
+        videojs.xhr(getFetchableSource(track), (err, resp) => {
+          if (err || resp.statusCode >= 400) {
+            videojs.log.debug(err, resp.statusCode);
+            return;
+          }
+
+          const cueRegex = /(\d\d:)?\d\d:\d\d\.\d\d\d[ \t]+-->[ \t]+(\d\d:)?\d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
+          let match;
+          const transcript = [];
+
+          while ((match = cueRegex.exec(resp.body)) !== null) {
+            transcript.push(match[3]);
+          }
+
+          ld.transcript = transcript.join('');
+
+          this.schemaEl_.textContent = JSON.stringify(ld);
+        });
       }
     }
 
