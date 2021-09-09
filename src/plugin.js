@@ -139,7 +139,7 @@ const schema = function(options) {
             return;
           }
 
-          const cueRegex = /(\d\d:)?\d\d:\d\d\.\d\d\d[ \t]+-->[ \t]+(\d\d:)?\d\d:\d\d\.\d\d\d\n((.+\n)+)/mg;
+          const cueRegex = /(\d\d:)?\d\d:\d\d\.\d\d\d[ \t]+-->[ \t]+(\d\d:)?\d\d:\d\d\.\d\d\d.*\n((.+\n)+)/mg;
           let match;
           const transcript = [];
 
