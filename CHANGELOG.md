@@ -1,3 +1,10 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/brightcove/videojs-schema/compare/v0.6.0...v0.6.1) (2021-09-09)
+
+### Bug Fixes
+
+* Support text tracks with styling information ([#36](https://github.com/brightcove/videojs-schema/issues/36)) ([8f04ab6](https://github.com/brightcove/videojs-schema/commit/8f04ab6))
+
 <a name="0.6.0"></a>
 # 0.6.0 (2021-09-08)
 
