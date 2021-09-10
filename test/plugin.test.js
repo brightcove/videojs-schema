@@ -92,7 +92,9 @@ QUnit.test('registers itself with video.js', function(assert) {
 QUnit.test('adds metadata', function(assert) {
 
   this.player.schema();
-  this.player.trigger('error');
+  // this.clock.tick(1);
+
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -113,7 +115,7 @@ QUnit.test('skips duration for live videos', function(assert) {
 
   this.player.mediainfo.duration = -1;
   this.player.schema();
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -131,7 +133,7 @@ QUnit.test('resolves macros', function(assert) {
   this.player.schema({
     schemaId: 'https://{id}/{referenceId}/{playerId}/{embedId}/{accountId}'
   });
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -154,7 +156,7 @@ QUnit.test('adds embed url if social plugin present', function(assert) {
   };
 
   this.player.schema();
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -179,7 +181,7 @@ QUnit.test('does not add embed if disabled', function(assert) {
   };
 
   this.player.schema({includeEmbedUrl: false});
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -198,7 +200,7 @@ QUnit.test('includes tags if requested', function(assert) {
     keywords: true,
     excludeTags: ['two']
   });
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -215,7 +217,7 @@ QUnit.test('merges onto base options', function(assert) {
       param1: 'abc'
     }
   });
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -240,7 +242,7 @@ QUnit.test('defaults to video title when prefer long description but both short 
   this.player.schema({
     preferLongDescription: true
   });
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   this.clock.tick(1);
 
@@ -252,7 +254,7 @@ QUnit.test('defaults to video title when prefer long description but both short 
 QUnit.test('defaults to short description', function(assert) {
 
   this.player.schema();
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -274,7 +276,7 @@ QUnit.test('defaults to video title if short description is empty', function(ass
     tags: ['one', 'two', 'three']
   };
   this.player.schema();
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -289,7 +291,7 @@ QUnit.test('long description can be used', function(assert) {
   this.player.schema({
     preferLongDescription: true
   });
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -309,7 +311,7 @@ QUnit.test('supports multilingual metadata', function(assert) {
   };
   this.player.language('fr');
   this.player.schema();
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
 
   // Tick the clock forward enough to trigger the player to be "ready".
   this.clock.tick(1);
@@ -336,7 +338,8 @@ QUnit.test('can add transcript', function(assert) {
   ];
   this.player.language('de-de');
   this.player.schema({transcript: true});
-  this.player.trigger('error');
+  this.player.trigger('catalog_response');
+  this.clock.tick(1);
 
   const mo = new window.MutationObserver(mutations => {
     const generatedSchema = JSON.parse(this.player.schemaEl_.textContent);

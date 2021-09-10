@@ -48,8 +48,7 @@ const schema = function(options) {
 
   options = videojs.mergeOptions(defaults, options);
 
-  // This listens to error because Googlebot cannot play video
-  this.on(['loadstart', 'error'], e => {
+  const setSchema = () => {
 
     if (!this.bcinfo || !this.catalog || !this.mediainfo || !this.mediainfo.id) {
       videojs.log.warn('Unable to add schema without catalog info.');
@@ -155,6 +154,11 @@ const schema = function(options) {
     }
 
     this.schemaEl_.textContent = JSON.stringify(ld);
+  };
+
+  // `mediainfo` is populated after `catalog_response` is fired
+  this.on(['catalog_response'], e => {
+    this.setTimeout(setSchema, 1);
   });
 
   // Remove this player's element on dispose
