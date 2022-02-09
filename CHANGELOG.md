@@ -1,3 +1,6 @@
+<a name="0.6.2"></a>
+## [0.6.2](https://github.com/brightcove/videojs-schema/compare/v0.6.1...v0.6.2) (2022-02-09)
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/brightcove/videojs-schema/compare/v0.6.0...v0.6.1) (2021-09-09)
 
