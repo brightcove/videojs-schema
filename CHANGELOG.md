@@ -1,3 +1,10 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/brightcove/videojs-schema/compare/v0.6.2...v0.7.0) (2022-11-22)
+
+### Bug Fixes
+
+* remove deprecation warning on bcp 7 ([#64](https://github.com/brightcove/videojs-schema/issues/64)) ([a0803d2](https://github.com/brightcove/videojs-schema/commit/a0803d2))
+
 <a name="0.6.2"></a>
 ## [0.6.2](https://github.com/brightcove/videojs-schema/compare/v0.6.1...v0.6.2) (2022-02-09)
 
