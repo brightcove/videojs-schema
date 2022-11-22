@@ -15,6 +15,8 @@ const defaults = {
   transcriptMatchAny: false
 };
 
+const mergeOptions = videojs.obj ? videojs.obj.merge : videojs.mergeOptions;
+
 /**
  * Schema plugin. Adds schema.org metadata in json+ld format
  * to the DOM for Google and other search engines which will
@@ -46,7 +48,7 @@ const schema = function(options) {
   this.schemaEl_.type = 'application/ld+json';
   document.head.appendChild(this.schemaEl_);
 
-  options = videojs.mergeOptions(defaults, options);
+  options = mergeOptions(defaults, options);
 
   // This listens to error because Googlebot cannot play video
   this.on(['loadstart', 'error'], e => {
@@ -58,7 +60,7 @@ const schema = function(options) {
 
     const mediainfo = this.catalog.getMetadata ? this.catalog.getMetadata({lang: this.language()}) : this.mediainfo;
 
-    const ld = videojs.mergeOptions(options.baseObject, {
+    const ld = mergeOptions(options.baseObject, {
       '@context': 'http://schema.org/',
       '@type': 'VideoObject',
       'name': mediainfo.name,
