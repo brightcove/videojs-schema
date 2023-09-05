@@ -43,11 +43,17 @@ Defaults to `https://players.brightcove.net/{accountId}/{playerId}_{embedId}/ind
 
 `keywords` - if `true`, include tags as keywords. Default is `false`.
 
-`excludeTags` - array of tags to not include as keywords, e.g. `["youtubesync"]`
+`excludeTags` - array of tags to not include as keywords in the schema metadata, e.g. `["youtubesync"]`
 
 `baseObject` - an option object of properties onto which to build the video specific metadata. For example this could be used to include a publisher object:
 
 `includeEmbedUrl` - if `false`, no embed url is included. Inlcuding thisURL may be expected by search engines. Default is `true`.
+
+`skipRules` - used to exclude videos from having schema metadata generated, based on their video cloud metadata. Can be tags and / or custom fields. If multiple tags, fields or both are specified, matching any excludes.
+
+`skipRules.customFields` - any object of field-value pairs. If a field present and set to the value in the video's custom fields, no schema metadata is created. e.g. `{category: 'unlisted'}`
+
+`skipRules.tags` - any array of one or more tags. If any one is present in the video's metadata, no schema metadata is created. e.g. `['notthistag']`
 
 `transcript` - if `true`, a captions or subtitles track with a matching language will be added as a transcript. Default is `false`.
 
