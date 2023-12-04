@@ -65,8 +65,8 @@ const schema = function(options) {
       '@type': 'VideoObject',
       'name': mediainfo.name,
       'thumbnailUrl': mediainfo.poster,
-      'uploadDate': mediainfo.publishedAt.split('T')[0],
-      // Poor man's ad macros
+      'uploadDate': mediainfo.publishedAt,
+      // Subset of videojs-contrib-ads macros
       '@id': options.schemaId
         .replace('{id}', mediainfo.id)
         .replace('{referenceId}', mediainfo.referenceId)
