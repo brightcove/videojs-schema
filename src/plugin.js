@@ -12,7 +12,11 @@ const defaults = {
   includeEmbedUrl: true,
   preferLongDescription: false,
   transcript: false,
-  transcriptMatchAny: false
+  transcriptMatchAny: false,
+  skipRules: {
+    tags: [],
+    customFields: {}
+  }
 };
 
 const mergeOptions = videojs.obj ? videojs.obj.merge : videojs.mergeOptions;
@@ -30,7 +34,7 @@ const mergeOptions = videojs.obj ? videojs.obj.merge : videojs.mergeOptions;
  * @param    {boolean} [options.keywords]
  *           Whether to include tags as keywords
  * @param    {Array} [options.excludeTags]
- *           If including tags, an array of tags to exclude
+ *           If including tags, an array of tags to exclude from the schema metadata
  * @param    {Object} [options.baseObject]
  *           A template object to build the schema onto
  * @param    {boolean} [options.includeEmbedUrl]
@@ -41,6 +45,13 @@ const mergeOptions = videojs.obj ? videojs.obj.merge : videojs.mergeOptions;
  *           Whether to include a transcript from a subtitles or captions track
  * @param    {boolean} [options.transcriptMatchAny]
  *           Whether to return a transcript if there's a track but no language match
+ * @param    {Object} [options.skipRules]
+ *           An object that defines whether to not generate metadata based on metadata rules
+ * @param    {string[]} [options.skipRules.tags]
+ *           If any tag is present, do not generate metadata
+ * @param    {Object} [options.skipRules.customFields]
+ *           An object of custom fields e.g. `{ fieldName: "value" }`. If any field is set to its
+ *           specified value, then schema metadata is not generated for the video
  */
 const schema = function(options) {
   // Add element for this player to DOM
@@ -59,6 +70,19 @@ const schema = function(options) {
     }
 
     const mediainfo = this.catalog.getMetadata ? this.catalog.getMetadata({lang: this.language()}) : this.mediainfo;
+
+    if (
+      (options.skipRules.tags && options.skipRules.tags.some((t) => {
+        return mediainfo.tags.includes(t);
+      })) ||
+      (options.skipRules.customFields && Object.keys(options.skipRules.customFields).some((f) => {
+        return mediainfo.customFields[f] === options.skipRules.customFields[f];
+      }))
+    ) {
+      videojs.log.debug('Skipping generating schema metadata based on skip rule.');
+      this.schemaEl_.textContent = '';
+      return;
+    }
 
     const ld = mergeOptions(options.baseObject, {
       '@context': 'http://schema.org/',

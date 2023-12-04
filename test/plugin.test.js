@@ -349,3 +349,56 @@ QUnit.test('can add transcript', function(assert) {
 
   mo.observe(this.player.schemaEl_, {childList: true});
 });
+
+QUnit.test('skips videos that should be skipped because of tags', function(assert) {
+  this.player.mediainfo = {
+    id: 1234,
+    referenceId: 'xyz',
+    name: 'NAME',
+    description: '',
+    duration: 3661,
+    publishedAt: '2019-02-12T09:07:44',
+    poster: 'https://loremflickr.com/1280/720',
+    tags: ['one', 'two', 'three']
+  };
+  this.player.schema({
+    skipRules: {
+      tags: ['two']
+    }
+  });
+  // Setting dummy test, just to verify that it gets cleared
+  this.player.schemaEl_.textContent = 'xxx';
+  this.player.trigger('error');
+  this.clock.tick(1);
+
+  assert.equal(this.player.schemaEl_.textContent, '', 'no metadata for video with matching tag');
+});
+
+QUnit.test('skips videos that should be skipped because of custom fields', function(assert) {
+  this.player.mediainfo = {
+    id: 1234,
+    referenceId: 'xyz',
+    name: 'NAME',
+    description: '',
+    duration: 3661,
+    publishedAt: '2019-02-12T09:07:44',
+    poster: 'https://loremflickr.com/1280/720',
+    tags: ['one', 'two', 'three'],
+    customFields: {
+      field1: 'value'
+    }
+  };
+  this.player.schema({
+    skipRules: {
+      customFields: {
+        field1: 'value'
+      }
+    }
+  });
+  // Setting dummy test, just to verify that it gets cleared
+  this.player.schemaEl_.textContent = 'xxx';
+  this.player.trigger('error');
+  this.clock.tick(1);
+
+  assert.equal(this.player.schemaEl_.textContent, '', 'no metadata for video with matching custom field');
+});
