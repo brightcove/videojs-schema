@@ -1,6 +1,6 @@
 {
   "name": "videojs-schema",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Injects JSON-LD metadata into the DOM for SEO",
   "main": "cjs/plugin.js",
   "module": "es/plugin.js",

@@ -1,3 +1,14 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/brightcove/videojs-schema/compare/v0.7.0...v0.8.0) (2023-12-04)
+
+### Features
+
+* Add exclusion rules ([#72](https://github.com/brightcove/videojs-schema/issues/72)) ([50383e2](https://github.com/brightcove/videojs-schema/commit/50383e2))
+
+### Bug Fixes
+
+* Use full 8601 datetime for uploadDate ([#75](https://github.com/brightcove/videojs-schema/issues/75)) ([3265efd](https://github.com/brightcove/videojs-schema/commit/3265efd))
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/brightcove/videojs-schema/compare/v0.6.2...v0.7.0) (2022-11-22)
 
