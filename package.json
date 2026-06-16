@@ -94,7 +94,7 @@
     "conventional-changelog-videojs": "^3.0.0",
     "doctoc": "^2.2.1",
     "husky": "^1.0.1",
-    "jsdoc": "~3.6.6",
+    "jsdoc": "~4.0.5",
     "karma": "^6.3.2",
     "lint-staged": "^13.0.3",
     "not-prerelease": "^1.0.1",
